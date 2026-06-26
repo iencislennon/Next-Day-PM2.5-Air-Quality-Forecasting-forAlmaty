@@ -70,4 +70,7 @@ else:
     df = pd.json_normalize(all_rows)
     print(df.head())
     print(f"\n{len(df)} rows from {len(pm25_sensors)} sensors")
-    df.to_csv("Almaty_PM2.5.csv", index=False)
+
+    data_dir = os.path.join(os.path.dirname(__file__), "..", "data")
+    os.makedirs(data_dir, exist_ok=True)
+    df.to_csv(os.path.join(data_dir, "Almaty_PM2.5.csv"), index=False)
