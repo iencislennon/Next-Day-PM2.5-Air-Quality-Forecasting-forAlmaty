@@ -1,0 +1,36 @@
+[2026-06-28 04:06:03] INFO [TrainPipeline.train_ridge_baseline_model:16] Fitting Scikit-Learn Model...
+[2026-06-28 04:06:03] INFO [TrainPipeline.train_ridge_baseline_model:23] Model pipeline serialized to disk successfully.
+[2026-06-28 04:06:04] INFO [TrainPipeline.train_ridge_baseline_model:31] Evaluation plots saved to models/plots/
+[2026-06-28 04:06:04] INFO [TrainPipeline.train_ridge_baseline_model:32] Ridge Baseline test results: MSE=0.0115, RMSE=0.1071, R2=1.0000
+[2026-06-28 04:06:04] INFO [TrainPipeline.train_random_forest_pipeline:37] Fitting Scikit-Learn Model...
+[2026-06-28 04:06:04] INFO [TrainPipeline.train_random_forest_pipeline:45] Model pipeline serialized to disk successfully.
+[2026-06-28 04:06:04] INFO [TrainPipeline.train_random_forest_pipeline:54] Evaluation plots saved to models/plots/
+[2026-06-28 04:06:04] INFO [TrainPipeline.train_random_forest_pipeline:55] Random Forest test results: MSE=0.2105, RMSE=0.4588, R2=0.9999
+[2026-06-28 04:06:04] INFO [TrainPipeline.train_gradient_boosting_pipeline:59] Fitting Scikit-Learn Model...
+[2026-06-28 04:06:09] INFO [TrainPipeline.train_gradient_boosting_pipeline:67] Model pipeline serialized to disk successfully.
+[2026-06-28 04:06:09] INFO [TrainPipeline.train_gradient_boosting_pipeline:74] Evaluation plots saved to models/plots/
+[2026-06-28 04:06:09] INFO [TrainPipeline.train_gradient_boosting_pipeline:75] Gradient Boosting test results: MSE=0.0176, RMSE=0.1328, R2=1.0000
+[2026-06-28 04:08:23] INFO [TrainPipeline.train_ridge_baseline_model:16] Fitting Scikit-Learn Model...
+[2026-06-28 04:08:23] INFO [TrainPipeline.train_ridge_baseline_model:23] Model pipeline serialized to disk successfully.
+[2026-06-28 04:08:23] INFO [TrainPipeline.train_ridge_baseline_model:31] Evaluation plots saved to models/plots/
+[2026-06-28 04:08:23] INFO [TrainPipeline.train_ridge_baseline_model:32] Ridge Baseline test results: MSE=0.0115, RMSE=0.1071, R2=1.0000
+[2026-06-28 04:08:23] INFO [TrainPipeline.train_random_forest_pipeline:37] Fitting Scikit-Learn Model...
+[2026-06-28 04:08:23] INFO [TrainPipeline.train_random_forest_pipeline:45] Model pipeline serialized to disk successfully.
+[2026-06-28 04:08:24] INFO [TrainPipeline.train_random_forest_pipeline:54] Evaluation plots saved to models/plots/
+[2026-06-28 04:08:24] INFO [TrainPipeline.train_random_forest_pipeline:55] Random Forest test results: MSE=0.2105, RMSE=0.4588, R2=0.9999
+[2026-06-28 04:08:24] INFO [TrainPipeline.train_gradient_boosting_pipeline:59] Fitting Scikit-Learn Model...
+[2026-06-28 04:08:28] INFO [TrainPipeline.train_gradient_boosting_pipeline:67] Model pipeline serialized to disk successfully.
+[2026-06-28 04:08:28] INFO [TrainPipeline.train_gradient_boosting_pipeline:74] Evaluation plots saved to models/plots/
+[2026-06-28 04:08:28] INFO [TrainPipeline.train_gradient_boosting_pipeline:75] Gradient Boosting test results: MSE=0.0176, RMSE=0.1328, R2=1.0000
+[2026-06-28 04:17:56] INFO [TrainPipeline.train_ridge_baseline_model:16] Fitting Scikit-Learn Model...
+[2026-06-28 04:17:56] INFO [TrainPipeline.train_ridge_baseline_model:23] Model pipeline serialized to disk successfully.
+[2026-06-28 04:17:56] INFO [TrainPipeline.train_ridge_baseline_model:31] Evaluation plots saved to models/plots/
+[2026-06-28 04:17:56] INFO [TrainPipeline.train_ridge_baseline_model:32] Ridge Baseline test results: MSE=1861.1517, RMSE=43.1411, R2=-0.2198
+[2026-06-28 04:17:56] INFO [TrainPipeline.train_random_forest_pipeline:37] Fitting Scikit-Learn Model...
+[2026-06-28 04:17:56] INFO [TrainPipeline.train_random_forest_pipeline:45] Model pipeline serialized to disk successfully.
+[2026-06-28 04:17:56] INFO [TrainPipeline.train_random_forest_pipeline:54] Evaluation plots saved to models/plots/
+[2026-06-28 04:17:56] INFO [TrainPipeline.train_random_forest_pipeline:55] Random Forest test results: MSE=1867.3936, RMSE=43.2133, R2=-0.2239
+[2026-06-28 04:17:56] INFO [TrainPipeline.train_gradient_boosting_pipeline:59] Fitting Scikit-Learn Model...
+[2026-06-28 04:17:57] INFO [TrainPipeline.train_gradient_boosting_pipeline:67] Model pipeline serialized to disk successfully.
+[2026-06-28 04:17:57] INFO [TrainPipeline.train_gradient_boosting_pipeline:74] Evaluation plots saved to models/plots/
+[2026-06-28 04:17:57] INFO [TrainPipeline.train_gradient_boosting_pipeline:75] Gradient Boosting test results: MSE=2478.5846, RMSE=49.7854, R2=-0.6244

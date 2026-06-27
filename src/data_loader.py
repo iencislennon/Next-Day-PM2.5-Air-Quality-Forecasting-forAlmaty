@@ -33,7 +33,7 @@ class PM25DataLoder:
         'period.datetimeFrom.local', 'period.datetimeTo.utc', 'period.datetimeTo.local', 'period.datetimeFrom.utc', 
         'coverage.datetimeFrom.utc', 'coverage.datetimeFrom.local', 'coverage.datetimeTo.utc', 'coverage.datetimeTo.local',
         'coverage.expectedCount', 'coverage.expectedInterval', 'coverage.observedInterval', 'coverage.observedCount',
-         'coverage.percentComplete', 'summary.q02', 'summary.q98', 'summary.q25', 'summary.median']) 
+         'coverage.percentComplete', 'summary.q02', 'summary.q98', 'summary.q25', 'summary.median', 'summary.min', 'summary.max', 'summary.avg', 'summary.q75', 'summary.sd']) 
         clean_df = clean_df[clean_df['value'] <= 300]
         clean_df = clean_df.dropna()
         def season_label_encoder(x):
