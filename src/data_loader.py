@@ -14,44 +14,59 @@ class PM25DataLoder:
 
     def preprocesses(self):
         df = self.load_raw_data()
-        df['period.datetimeTo.local'] = pd.to_datetime(df['period.datetimeTo.local'], errors='coerce')
+        
+        df['date'] = pd.to_datetime(df['period.datetimeTo.local'], errors='coerce', utc=True)
+        
         def season_convert(x):
             if pd.isna(x):
                 return 'unknown'
-            if x in [1,2,12]:
+            if x in [1, 2, 12]:
                 return 'winter'
-            elif x in [3,4,5]:
+            elif x in [3, 4, 5]:
                 return 'spring'
-            elif x in [6,7,8]:
+            elif x in [6, 7, 8]:
                 return 'summer'
             else:
                 return 'autumn'
-        df['season'] = df['period.datetimeTo.local'].dt.month.apply(season_convert)
-
-        clean_df = df.drop(columns=['coordinates', 'parameter.displayName', 'location_id', 'parameter.id', 'parameter.name', 
-        'parameter.units', 'parameter.displayName', 'parameter.displayName', 'period.label', 'period.interval', 
-        'period.datetimeFrom.local', 'period.datetimeTo.utc', 'period.datetimeTo.local', 'period.datetimeFrom.utc', 
-        'coverage.datetimeFrom.utc', 'coverage.datetimeFrom.local', 'coverage.datetimeTo.utc', 'coverage.datetimeTo.local',
-        'coverage.expectedCount', 'coverage.expectedInterval', 'coverage.observedInterval', 'coverage.observedCount',
-         'coverage.percentComplete', 'summary.q02', 'summary.q98', 'summary.q25', 'summary.median', 'summary.min', 'summary.max', 'summary.avg', 'summary.q75', 'summary.sd']) 
-        clean_df = clean_df[clean_df['value'] <= 300]
-        clean_df = clean_df.dropna()
-        def season_label_encoder(x):
-            if x == 'summer':
-                return 0
-            elif x == 'summer':
-                return 1
-            elif x == 'summer':
-                return 2
-            else:
-                return 3
-        clean_df['season'] = clean_df['season'].apply(season_label_encoder)
-       
-        le = LabelEncoder()
-        clean_df['flagInfo.hasFlags'] = le.fit_transform(clean_df['flagInfo.hasFlags'])
-
         
-        return clean_df 
+        df['season'] = df['date'].dt.month.apply(season_convert)
+        season_map = {'summer': 0, 'autumn': 1, 'spring': 2, 'winter': 3}
+        df['season'] = df['season'].map(season_map)
+        
+        df['month'] = df['date'].dt.month
+        df['day_of_year'] = df['date'].dt.dayofyear
+        df['year'] = df['date'].dt.year
+        
+        drop_cols = [
+            'coordinates', 'parameter.displayName', 'location_id', 'parameter.id',
+            'parameter.name', 'parameter.units', 'period.label', 'period.interval',
+            'period.datetimeFrom.local', 'period.datetimeTo.utc', 'period.datetimeTo.local',
+            'period.datetimeFrom.utc', 'coverage.datetimeFrom.utc', 'coverage.datetimeFrom.local',
+            'coverage.datetimeTo.utc', 'coverage.datetimeTo.local', 'coverage.expectedCount',
+            'coverage.expectedInterval', 'coverage.observedInterval', 'coverage.observedCount',
+            'coverage.percentComplete', 'summary.q02', 'summary.q98', 'summary.q25',
+            'summary.median', 'summary.min', 'summary.max', 'summary.avg', 
+            'summary.q75', 'summary.sd', 'date'
+        ]
+        df = df.drop(columns=drop_cols)
+        
+        df = df[df['value'] <= 300]
+        df = df.dropna(subset=['value'])
+        
+        df['flagInfo.hasFlags'] = df['flagInfo.hasFlags'].astype(int)
+        
+        # lag features - previous days/weeks/years
+        df = df.sort_values(['location_name', 'month', 'day_of_year'])
+        
+        df['pm25_lag1'] = df.groupby('location_name')['value'].shift(1)
+        df['pm25_lag7'] = df.groupby('location_name')['value'].shift(7)
+        df['pm25_rolling7'] = df.groupby('location_name')['value'].transform(
+            lambda x: x.shift(1).rolling(7).mean()
+        )
+        
+        df = df.dropna(subset=['pm25_lag1', 'pm25_lag7', 'pm25_rolling7'])
+        
+        return df
 
     def train_test_split(self, test_size=0.2, random_state=42):
         df = self.preprocesses()
