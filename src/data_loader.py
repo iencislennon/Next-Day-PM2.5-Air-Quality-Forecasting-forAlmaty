@@ -49,6 +49,7 @@ class PM25DataLoder:
        
         le = LabelEncoder()
         clean_df['flagInfo.hasFlags'] = le.fit_transform(clean_df['flagInfo.hasFlags'])
+
         
         return clean_df 
 
@@ -57,7 +58,28 @@ class PM25DataLoder:
         y = df['value']
         X = df.drop(columns=['value'])
 
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=random_state, shuffle=True)
+        X_train, X_test, y_train, y_test = train_test_split(
+            X, y, 
+            test_size=test_size, 
+            random_state=random_state,
+            shuffle=False
+        )
+        
+        X_train = X_train.copy()
+        X_test = X_test.copy()
+        
+        train_enc_df = X_train.copy()
+        train_enc_df['value'] = y_train.values
+        train_enc = train_enc_df.groupby('location_name')['value'].mean()
+        
+        global_mean = y_train.mean()
+        
+        X_train['location_encoded'] = X_train['location_name'].map(train_enc).fillna(global_mean)
+        X_test['location_encoded'] = X_test['location_name'].map(train_enc).fillna(global_mean)
+
+        X_train = X_train.drop(columns=['location_name'])
+        X_test = X_test.drop(columns=['location_name'])
+        
         return X_train, X_test, y_train.values, y_test.values
 
 if __name__ == '__main__':
