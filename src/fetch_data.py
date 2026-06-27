@@ -49,8 +49,8 @@ else:
 
     # Step 2: pull daily PM2.5 averages for each sensor, staying under the rate limit
     days_params = {
-        "date_from": "2026-01-01",
-        "date_to": "2026-06-01",
+        "date_from": "2025-01-01",
+        "date_to": "2026-01-01",
         "limit": "1000",
     }
 
