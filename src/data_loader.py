@@ -4,8 +4,8 @@ from sklearn.model_selection import train_test_split
 import os 
 
 class PM25DataLoder:
-    def __init__(self):
-        self.path = 'data/raw/Almaty_PM2.5.csv'
+    def __init__(self, path='data/raw/Almaty_PM2.5.csv'):
+        self.path = path
     def load_raw_data(self):
         if not os.path.exists(self.path):
             raise FileNotFoundError(f"File not found at {self.path}")
@@ -34,7 +34,7 @@ class PM25DataLoder:
         df['season'] = df['season'].map(season_map)
         
         df['month'] = df['date'].dt.month
-        df['day_of_year'] = df['date'].dt.dayofyear
+        df['day_of_year'] = df['date'].dt.day_of_year
         df['year'] = df['date'].dt.year
         
         drop_cols = [
@@ -46,7 +46,7 @@ class PM25DataLoder:
             'coverage.expectedInterval', 'coverage.observedInterval', 'coverage.observedCount',
             'coverage.percentComplete', 'summary.q02', 'summary.q98', 'summary.q25',
             'summary.median', 'summary.min', 'summary.max', 'summary.avg', 
-            'summary.q75', 'summary.sd', 'date'
+            'summary.q75', 'summary.sd'
         ]
         df = df.drop(columns=drop_cols)
         
@@ -56,7 +56,9 @@ class PM25DataLoder:
         df['flagInfo.hasFlags'] = df['flagInfo.hasFlags'].astype(int)
         
         # lag features - previous days/weeks/years
-        df = df.sort_values(['location_name', 'month', 'day_of_year'])
+        # Sort chronologically within each station (year included) so lags never
+        # look into the future or jump across years.
+        df = df.sort_values(['location_name', 'date'])
         
         df['pm25_lag1'] = df.groupby('location_name')['value'].shift(1)
         df['pm25_lag7'] = df.groupby('location_name')['value'].shift(7)
@@ -69,17 +71,21 @@ class PM25DataLoder:
         return df
 
     def train_test_split(self, test_size=0.2, random_state=42):
-        df = self.preprocesses()
-        y = df['value']
-        X = df.drop(columns=['value'])
+        """Chronological holdout: every test row is later than every train row.
 
-        X_train, X_test, y_train, y_test = train_test_split(
-            X, y, 
-            test_size=test_size, 
-            random_state=random_state,
-            shuffle=False
-        )
-        
+        random_state is kept for API compatibility; it has no effect because the
+        split is deterministic by date.
+        """
+        df = self.preprocesses()
+        df = df.sort_values('date')
+        cutoff = df['date'].iloc[int(len(df) * (1 - test_size))]
+        train_df = df[df['date'] < cutoff]
+        test_df = df[df['date'] >= cutoff]
+
+        y_train, y_test = train_df['value'], test_df['value']
+        X_train = train_df.drop(columns=['value', 'date'])
+        X_test = test_df.drop(columns=['value', 'date'])
+
         X_train = X_train.copy()
         X_test = X_test.copy()
         
