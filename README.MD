@@ -8,6 +8,8 @@ Almaty has some of the worst air quality in Central Asia due to its bowl-shaped 
 
 ## Results
 
+> **Results pending re-run.** The numbers below were produced before the evaluation split was fixed: data had been ordered by station, month and day-of-year (year ignored), so the "holdout" was not a chronological test set and lag features could cross years. The loader now sorts by date and splits chronologically (see `tests/test_data_loader.py`). Re-run `python train.py` on a fresh OpenAQ export and replace this table; until then treat these figures as unverified.
+
 | Model | RMSE | R² |
 |---|---|---|
 | Ridge (baseline) | 17.84 µg/m³ | 0.55 |
